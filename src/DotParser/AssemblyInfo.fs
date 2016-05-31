@@ -3,7 +3,7 @@ open System.Reflection
 
 [<assembly: AssemblyTitleAttribute("DotParser")>]
 [<assembly: AssemblyProductAttribute("DotParser")>]
-[<assembly: AssemblyDescriptionAttribute("Project has no summmary; update build.fsx")>]
+[<assembly: AssemblyDescriptionAttribute("Graphviz dot parser")>]
 [<assembly: AssemblyVersionAttribute("1.0")>]
 [<assembly: AssemblyFileVersionAttribute("1.0")>]
 do ()
