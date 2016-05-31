@@ -1,18 +1,16 @@
 source https://nuget.org/api/v2
 
 nuget FSharp.Core redirects: force
+nuget FsLexYacc
+nuget FSPowerPack.Core.Community
 
-group Build
-  source https://nuget.org/api/v2
-  
-  nuget SourceLink.Fake
-  nuget FAKE
-  nuget FSharp.Formatting
+nuget SourceLink.Fake
+nuget FAKE
+nuget FSharp.Formatting
+nuget YC.FsYARD 0.1.5033.0 framework: >= net45
 
-  github fsharp/FAKE modules/Octokit/Octokit.fsx
+github fsharp/FAKE modules/Octokit/Octokit.fsx
 
-group Test
-  source https://nuget.org/api/v2
-  
-  nuget NUnit ~> 2
-  nuget NUnit.Runners ~> 2
+nuget NUnit
+nuget NUnit.Runners
+github fsprojects/FsUnit src/FsUnit.NUnit/FsUnit.fs
