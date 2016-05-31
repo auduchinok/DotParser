@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -50,7 +50,7 @@
     </Otherwise>
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
-  <Import Project="FsYARD\FsYard.targets" />
+  <Import Project="..\..\lib\FsYARD\FsYARD.targets" />
   <Import Project="..\..\packages\FsLexYacc\build\FsLexYacc.targets" />
   <PropertyGroup>
     <RLiterals>KW_%s</RLiterals>
@@ -72,29 +72,29 @@
     <Compile Include="Library.fs" />
     <None Include="paket.template" />
     <Content Include="App.config" />
-    <None Include="FsYARD\YardFrontend.pdb" />
-    <None Include="FsYARD\RNGLRParser.pdb" />
-    <None Include="FsYARD\RNGLRCommon.pdb" />
-    <None Include="FsYARD\RNGLR.pdb" />
-    <None Include="FsYARD\FsYARD.pdb" />
-    <None Include="FsYARD\FsYacc.pdb" />
-    <None Include="FsYARD\FSharpx.Text.StructuredFormat.pdb" />
-    <None Include="FsYARD\FSharpx.Core.pdb" />
-    <None Include="FsYARD\Conversions.pdb" />
-    <None Include="FsYARD\Constraints.pdb" />
-    <None Include="FsYARD\Common.pdb" />
-    <None Include="FsYARD\YardFrontend.dll" />
-    <None Include="FsYARD\RNGLRParser.dll" />
-    <None Include="FsYARD\RNGLRCommon.dll" />
-    <None Include="FsYARD\RNGLR.dll" />
-    <None Include="FsYARD\FsYard.targets" />
-    <None Include="FsYARD\FsYARD.exe" />
-    <None Include="FsYARD\FsYacc.exe" />
-    <None Include="FsYARD\FSharpx.Text.StructuredFormat.dll" />
-    <None Include="FsYARD\FSharpx.Core.dll" />
-    <None Include="FsYARD\Conversions.dll" />
-    <None Include="FsYARD\Constraints.dll" />
-    <None Include="FsYARD\Common.dll" />
+    <None Include="..\..\lib\FsYARD\YardFrontend.pdb" />
+    <None Include="..\..\lib\FsYARD\RNGLRParser.pdb" />
+    <None Include="..\..\lib\FsYARD\RNGLRCommon.pdb" />
+    <None Include="..\..\lib\FsYARD\RNGLR.pdb" />
+    <None Include="..\..\lib\FsYARD\FsYARD.pdb" />
+    <None Include="..\..\lib\FsYARD\FsYacc.pdb" />
+    <None Include="..\..\lib\FsYARD\FSharpx.Text.StructuredFormat.pdb" />
+    <None Include="..\..\lib\FsYARD\FSharpx.Core.pdb" />
+    <None Include="..\..\lib\FsYARD\Conversions.pdb" />
+    <None Include="..\..\lib\FsYARD\Constraints.pdb" />
+    <None Include="..\..\lib\FsYARD\Common.pdb" />
+    <None Include="..\..\lib\FsYARD\YardFrontend.dll" />
+    <None Include="..\..\lib\FsYARD\RNGLRParser.dll" />
+    <None Include="..\..\lib\FsYARD\RNGLRCommon.dll" />
+    <None Include="..\..\lib\FsYARD\RNGLR.dll" />
+    <None Include="..\..\lib\FsYARD\FsYARD.targets" />
+    <None Include="..\..\lib\FsYARD\FsYARD.exe" />
+    <None Include="..\..\lib\FsYARD\FsYacc.exe" />
+    <None Include="..\..\lib\FsYARD\FSharpx.Text.StructuredFormat.dll" />
+    <None Include="..\..\lib\FsYARD\FSharpx.Core.dll" />
+    <None Include="..\..\lib\FsYARD\Conversions.dll" />
+    <None Include="..\..\lib\FsYARD\Constraints.dll" />
+    <None Include="..\..\lib\FsYARD\Common.dll" />
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
@@ -191,17 +191,17 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2')">
       <ItemGroup>
         <Reference Include="FSharpx.Core">
-          <HintPath>FsYARD\FSharpx.Core.dll</HintPath>
+          <HintPath>..\..\lib\FsYARD\FSharpx.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="RNGLRCommon">
-          <HintPath>FsYARD\RNGLRCommon.dll</HintPath>
+          <HintPath>..\..\lib\FsYARD\RNGLRCommon.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="RNGLRParser">
-          <HintPath>FsYARD\RNGLRParser.dll</HintPath>
+          <HintPath>..\..\lib\FsYARD\RNGLRParser.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
