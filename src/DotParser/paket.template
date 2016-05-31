@@ -1,0 +1,25 @@
+type project
+title
+    DotParser
+owners
+    Eugene Auduchinok
+authors 
+    Eugene Auduchinok
+projectUrl
+    http://github.com/auduchinok/DotParser
+iconUrl
+    https://raw.githubusercontent.com/auduchinok/DotParser/master/docs/files/img/logo.png
+licenseUrl
+    http://github.com/auduchinok/DotParser/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+copyright
+    Copyright 2015
+tags
+    dot graphviz parser
+summary
+    
+description
+    Description not set
+
+
