@@ -30,15 +30,8 @@ let emptyGraph d s =
     }
 
 let copyAttrs (g : GraphData) =
-    {
-        IsDirected = g.IsDirected
-        IsStrict   = g.IsStrict
-        Nodes = Map.empty
-        Edges = Map.empty
-        GraphAttributes = g.GraphAttributes
-        NodeAttributes  = g.NodeAttributes
-        EdgeAttributes  = g.EdgeAttributes
-    }
+    { g with Nodes = Map.empty; Edges = Map.empty }
+
 
 let merge = Map.fold (fun acc key value -> Map.add key value acc)
 
