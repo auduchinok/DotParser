@@ -3,11 +3,12 @@
 module DotParser
 
 open Yard.Generators.RNGLR.Parser
-open Yard.Generators.RNGLR.AST
+open Yard.Generators.Common.AST
 open Parser
 open Lexer
 open GraphData
 open System.Collections.Generic
+open Microsoft.FSharp.Text
 
 let parse str =
     let translateArgs = {
@@ -23,7 +24,7 @@ let parse str =
     let parsedGraphDataList : GraphData list =
         match buildAst tokens with
         | Error (pos, token, msg, _, _) -> failwithf "DotParser: error on position %d, token %A: %s" pos token msg
-        | Success (ast, errors) -> translate translateArgs ast errors
+        | Success (ast, _, errors) -> translate translateArgs ast errors
 
     match parsedGraphDataList with
     | data :: _ -> data

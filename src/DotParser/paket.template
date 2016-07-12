@@ -14,21 +14,18 @@ licenseUrl
 requireLicenseAcceptance
     false
 copyright
-    Copyright 2016
+    Eugene Auduchinok 2016
 tags
     dot graphviz graph parser
 summary
     Parser for Graphviz dot language.
 description
-    Parser for Graphviz dot language. Parsed graph stores info about vertices, edges and attributes. Drawing options are ignored.
+    Parser for Graphviz dot language. Parsed graphs store info about vertices, edges and attributes. Drawing options are ignored.
 references
     DotParser.dll
-    RNGLRCommon.dll
-    RNGLRParser.dll
 files
+    ../../bin/DotParser/AST.Common.dll ==> lib/net45
     ../../bin/DotParser/DotParser.dll ==> lib/net45
-    ../../bin/DotParser/DotParser.xml ==> lib/net45
-    ../../bin/DotParser/RNGLRCommon.dll ==> lib/net45
-    ../../bin/DotParser/RNGLRCommon.xml ==> lib/net45
-    ../../bin/DotParser/RNGLRParser.dll ==> lib/net45
-    ../../bin/DotParser/RNGLRParser.xml ==> lib/net45
+    ../../bin/DotParser/FsLexYacc.Runtime.dll ==> lib/net45
+    ../../bin/DotParser/YC.RNGLRCommon.dll ==> lib/net45
+    ../../bin/DotParser/YC.RNGLRParser.dll ==> lib/net45

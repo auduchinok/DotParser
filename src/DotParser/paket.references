@@ -1,2 +1,3 @@
 FSharp.Core
-FSPowerPack.Core.Community
+group build
+FSharpx.Collections.Experimental
