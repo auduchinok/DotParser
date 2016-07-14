@@ -51,11 +51,6 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <Import Project="..\..\.paket\paket.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-      $(SolutionDir)lib\FsYARD\YC.FsLex.exe --unicode $(SolutionDir)src\DotParser\Lexer.fsl -o $(SolutionDir)src\DotParser\gen\Lexer.fs
-    </PreBuildEvent>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="GraphData.fs" />
     <FsYard Include="Grammar.yrd" />
@@ -69,7 +64,13 @@
   </ItemGroup>
   <Target Name="BeforeBuild">
     <MakeDir Directories="gen" />
+    <Exec Command="$(SolutionDir)lib\FsYARD\YC.FsLex.exe --unicode $(SolutionDir)src\DotParser\Lexer.fsl -o $(SolutionDir)src\DotParser\gen\Lexer.fs" Condition=" '$(OS)' != 'Unix' " />
+    <Exec Command="mono $(SolutionDir)lib/FsYARD/YC.FsLex.exe --unicode $(SolutionDir)src/DotParser/Lexer.fsl -o $(SolutionDir)src/DotParser/gen/Lexer.fs" Condition=" '$(OS)' == 'Unix' " />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent Condition=" '$(OS)' != 'Unix' ">$(SolutionDir)lib\FsYARD\YC.YaccConstructor.exe -i $(SolutionDir)src\DotParser\Grammar.yrd -g "RNGLRGenerator -pos int -token string -module Parser -translate true -o $(SolutionDir)src\DotParser\gen/Parser.fs"</PreBuildEvent>
+    <PreBuildEvent Condition=" '$(OS)' == 'Unix' ">mono $(SolutionDir)lib/FsYARD/YC.YaccConstructor.exe -i $(SolutionDir)src/DotParser/Grammar.yrd -g "RNGLRGenerator -pos int -token string -module Parser -translate true -o $(SolutionDir)src/DotParser/gen/Parser.fs"</PreBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AST.Common">
       <HintPath>..\..\lib\FsYARD\AST.Common.dll</HintPath>
