@@ -21,7 +21,7 @@ GITHUB
 GROUP Build
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.29.2)
+    FAKE (4.30.2)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Core (4.0.0.1)
     FSharp.Formatting (2.14.4)
@@ -45,5 +45,5 @@ NUGET
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (c56456abac6b744c3bb95b217687db19fd19b367)
+    modules/Octokit/Octokit.fsx (f35a5d927148ca1a5fe5bc6ae2c1a37e3b2b5923)
       Octokit (>= 0.20)
