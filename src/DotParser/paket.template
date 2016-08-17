@@ -24,8 +24,4 @@ description
 references
     DotParser.dll
 files
-    ../../bin/DotParser/AST.Common.dll ==> lib/net45
     ../../bin/DotParser/DotParser.dll ==> lib/net45
-    ../../bin/DotParser/FsLexYacc.Runtime.dll ==> lib/net45
-    ../../bin/DotParser/YC.RNGLRCommon.dll ==> lib/net45
-    ../../bin/DotParser/YC.RNGLRParser.dll ==> lib/net45

@@ -1,3 +1,6 @@
+### 1.0.6 - August 17 2016
+* Merge libraries into single dll
+
 ### 1.0.5 - July 12 2016
 * Fix references
 

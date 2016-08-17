@@ -34,6 +34,7 @@ NUGET
     FSharpx.Collections.Experimental (1.15.1)
       FSharp.Core
       FSharpx.Collections (>= 1.15.1)
+    ilmerge (2.14.1208)
     Microsoft.Bcl (1.1.10) - framework: net10, net11, net20, net30, net35, net40, net40-full
       Microsoft.Bcl.Build (>= 1.0.14)
     Microsoft.Bcl.Build (1.0.21) - import_targets: false, framework: net10, net11, net20, net30, net35, net40, net40-full

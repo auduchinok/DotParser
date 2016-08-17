@@ -67,6 +67,14 @@
     <Exec Command="$(SolutionDir)lib\FsYARD\YC.FsLex.exe --unicode $(SolutionDir)src\DotParser\Lexer.fsl -o $(SolutionDir)src\DotParser\gen\Lexer.fs" Condition=" '$(OS)' != 'Unix' " />
     <Exec Command="mono $(SolutionDir)lib/FsYARD/YC.FsLex.exe --unicode $(SolutionDir)src/DotParser/Lexer.fsl -o $(SolutionDir)src/DotParser/gen/Lexer.fs" Condition=" '$(OS)' == 'Unix' " />
   </Target>
+  <Target Name="AfterBuild">
+    <MakeDir Directories="bin\ReleaseMerged" />
+    <Exec Command=
+    "$(SolutionDir)packages\build\ilmerge\tools\ILMerge.exe /out:bin\ReleaseMerged\DotParser.dll bin\Release\DotParser.dll bin\Release\AST.Common.dll bin\Release\FSharpx.Collections.dll bin\Release\FSharpx.Collections.Experimental.dll bin\Release\FsLexYacc.Runtime.dll bin\Release\YC.RNGLRCommon.dll bin\Release\YC.RNGLRParser.dll" />
+    <RemoveDir Directories="bin\Release" />
+    <makeDir Directories="bin\Release" />
+    <Move SourceFiles="bin\ReleaseMerged\DotParser.dll" DestinationFolder="bin\Release"/>
+  </Target>
   <PropertyGroup>
     <PreBuildEvent Condition=" '$(OS)' != 'Unix' ">$(SolutionDir)lib\FsYARD\YC.YaccConstructor.exe -i $(SolutionDir)src\DotParser\Grammar.yrd -g "RNGLRGenerator -pos int -token string -module Parser -translate true -o $(SolutionDir)src\DotParser\gen/Parser.fs"</PreBuildEvent>
     <PreBuildEvent Condition=" '$(OS)' == 'Unix' ">mono $(SolutionDir)lib/FsYARD/YC.YaccConstructor.exe -i $(SolutionDir)src/DotParser/Grammar.yrd -g "RNGLRGenerator -pos int -token string -module Parser -translate true -o $(SolutionDir)src/DotParser/gen/Parser.fs"</PreBuildEvent>
