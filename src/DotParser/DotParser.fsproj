@@ -1,34 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <Tailcalls>false</Tailcalls>
-    <OutputPath>.\bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <WarningLevel>3</WarningLevel>
-    <OtherFlags>--warnon:1182</OtherFlags>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <Tailcalls>true</Tailcalls>
-    <OutputPath>.\bin\Release</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <WarningLevel>3</WarningLevel>
-    <DocumentationFile>.\bin\Release\DotParser.xml</DocumentationFile>
-    <OtherFlags>--warnon:1182</OtherFlags>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <NoWarn>FS1182;FS3189</NoWarn>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-
   <PropertyGroup>
-    <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
+    <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
+    <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
+
+    <PackageVersion>1.0.7</PackageVersion>
+    <Title>DotParser</Title>
+    <Description>Graphviz dot parser</Description>
+    <Authors>auduchinok</Authors>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -48,20 +26,32 @@
   </Target>
 
   <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="GraphData.fs" />
     <Compile Include="Grammar.yrd.fs" />
     <Compile Include="Lexer.fs" />
     <Compile Include="Library.fs" />
-    <Content Include="App.config" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharpx.Collections" Version="1.8.45" />
-    <PackageReference Include="FSharpx.Collections.Experimental" Version="1.8.41" />
-    <PackageReference Include="FsLexYacc.Runtime" Version="7.0.6" />
-    <PackageReference Include="ILRepack" Version="$(ILRepackVersion)" />
-    <PackageReference Include="YC.FsYARD" Version="$(FsYardVersion)" />
+    <PackageReference Include="FSharpx.Collections" Version="1.8.45">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="FSharpx.Collections.Experimental" Version="1.8.41">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="FsLexYacc.Runtime" Version="7.0.6">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="ILRepack" Version="$(ILRepackVersion)">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="YC.FsYARD" Version="$(FsYardVersion)">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -74,15 +64,6 @@
 	  <Message Text="@(_ResolveAssemblyReferenceResolvedFiles)" />
   </Target>
 
-  <Target Name="ReadPackageVersionFromOutputAssembly">
-    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
-      <Output TaskParameter="Assemblies" ItemName="PackAssembly" />
-    </GetAssemblyIdentity>
-    <PropertyGroup>
-      <PackageVersion>%(PackAssembly.Version)</PackageVersion>
-    </PropertyGroup>
-  </Target>
-
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
     <PropertyGroup>
       <InputAssemblies>$(OutputPath)\DotParser.dll $(OutputPath)\AST.Common.dll $(OutputPath)\FsLexYacc.Runtime.dll $(OutputPath)\YC.RNGLRCommon.dll $(OutputPath)\YC.RNGLRParser.dll</InputAssemblies>
@@ -90,6 +71,5 @@
     <Copy SourceFiles="@(_ResolveAssemblyReferenceResolvedFiles)" DestinationFolder="$(OutputPath)" />
 
     <Exec Command="$(ILRepack) -target:library -internalize -out:$(OutputPath)\DotParser.dll -lib:$(OutputPath) $(InputAssemblies)" />
-    <CallTarget Targets="ReadPackageVersionFromOutputAssembly" />
   </Target>
 </Project>
