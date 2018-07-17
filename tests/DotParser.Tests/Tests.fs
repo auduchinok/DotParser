@@ -6,7 +6,7 @@ open FsUnit
 open NUnit.Framework
 open System.Collections
 open System.Linq
-
+open FSharpx.Collections
 
 let isDirected (g : GraphData) = g.IsDirected
 let isStrict   (g : GraphData) = g.IsStrict
