@@ -10,6 +10,7 @@
     <WarningLevel>3</WarningLevel>
     <OtherFlags>--warnon:1182</OtherFlags>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -23,6 +24,7 @@
     <OtherFlags>--warnon:1182</OtherFlags>
     <TargetFramework>netstandard2.0</TargetFramework>
     <NoWarn>FS1182;FS3189</NoWarn>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -36,6 +38,8 @@
     <YaccConstructor>$(NuGetPackageRoot)yc.fsyard\$(FsYardVersion)\lib\net40\YC.YaccConstructor.exe</YaccConstructor>
     <YCFsLex>$(NuGetPackageRoot)yc.fsyard\$(FsYardVersion)\lib\net40\AbstractLexer.Generator.exe</YCFsLex>
     <ILRepack>$(NuGetPackageRoot)ilrepack\$(ILRepackVersion)\tools\ILRepack.exe</ILRepack>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
@@ -44,6 +48,7 @@
   </Target>
 
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="GraphData.fs" />
     <Compile Include="Grammar.yrd.fs" />
     <Compile Include="Lexer.fs" />
@@ -69,12 +74,22 @@
 	  <Message Text="@(_ResolveAssemblyReferenceResolvedFiles)" />
   </Target>
 
+  <Target Name="ReadPackageVersionFromOutputAssembly">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="PackAssembly" />
+    </GetAssemblyIdentity>
+    <PropertyGroup>
+      <PackageVersion>%(PackAssembly.Version)</PackageVersion>
+    </PropertyGroup>
+  </Target>
+
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
     <PropertyGroup>
       <InputAssemblies>$(OutputPath)\DotParser.dll $(OutputPath)\AST.Common.dll $(OutputPath)\FsLexYacc.Runtime.dll $(OutputPath)\YC.RNGLRCommon.dll $(OutputPath)\YC.RNGLRParser.dll</InputAssemblies>
     </PropertyGroup>
     <Copy SourceFiles="@(_ResolveAssemblyReferenceResolvedFiles)" DestinationFolder="$(OutputPath)" />
 
-    <Exec Command="$(ILRepack) -target:library -internalize -out:bin\Release\DotParser.dll -lib:$(OutputPath) $(InputAssemblies)" />
+    <Exec Command="$(ILRepack) -target:library -internalize -out:$(OutputPath)\DotParser.dll -lib:$(OutputPath) $(InputAssemblies)" />
+    <CallTarget Targets="ReadPackageVersionFromOutputAssembly" />
   </Target>
 </Project>
