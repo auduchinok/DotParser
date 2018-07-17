@@ -1,135 +1,75 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>63c37483-04c3-42da-87ae-5d1225af713a</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>DotParser</RootNamespace>
-    <AssemblyName>DotParser</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFSharpCoreVersion>4.3.0.0</TargetFSharpCoreVersion>
-    <Name>DotParser</Name>
-    <TargetFrameworkProfile />
+    <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
+    <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
+
+    <PackageVersion>1.0.7</PackageVersion>
+    <Title>DotParser</Title>
+    <Description>Graphviz dot parser</Description>
+    <Authors>auduchinok</Authors>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <Tailcalls>false</Tailcalls>
-    <OutputPath>.\bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <WarningLevel>3</WarningLevel>
-    <OtherFlags>--warnon:1182</OtherFlags>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <Tailcalls>true</Tailcalls>
-    <OutputPath>.\bin\Release</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <WarningLevel>3</WarningLevel>
-    <DocumentationFile>.\bin\Release\DotParser.xml</DocumentationFile>
-    <OtherFlags>--warnon:1182</OtherFlags>
-  </PropertyGroup>
+
   <PropertyGroup>
-    <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
+    <FsYardVersion>0.2.8.16</FsYardVersion>
+    <ILRepackVersion>2.0.15</ILRepackVersion>
+
+    <YaccConstructor>$(NuGetPackageRoot)yc.fsyard\$(FsYardVersion)\lib\net40\YC.YaccConstructor.exe</YaccConstructor>
+    <YCFsLex>$(NuGetPackageRoot)yc.fsyard\$(FsYardVersion)\lib\net40\AbstractLexer.Generator.exe</YCFsLex>
+    <ILRepack>$(NuGetPackageRoot)ilrepack\$(ILRepackVersion)\tools\ILRepack.exe</ILRepack>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
-  <Choose>
-    <When Condition="'$(VisualStudioVersion)' == '11.0'">
-      <PropertyGroup Condition="Exists('$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets')">
-        <FSharpTargetsPath>$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets</FSharpTargetsPath>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets')">
-        <FSharpTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets</FSharpTargetsPath>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
-  <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
-  <Import Project="..\..\.paket\paket.targets" />
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Condition="!Exists('Lexer.fs')" Command="$(YCFsLex) --unicode Lexer.fsl -o Lexer.fs" />
+    <Exec ContinueOnError="true" Condition="!Exists('Grammar.yrd.fs')" Command="$(YaccConstructor) -i Grammar.yrd -g &quot;RNGLRGenerator -pos int -token string -module Parser -translate true&quot;" />
+  </Target>
+
   <ItemGroup>
     <Compile Include="GraphData.fs" />
-    <FsYard Include="Grammar.yrd" />
-    <Compile Include="gen\Parser.fs" />
-    <Compile Include="gen\Lexer.fs" />
+    <Compile Include="Grammar.yrd.fs" />
+    <Compile Include="Lexer.fs" />
     <Compile Include="Library.fs" />
-    <None Include="paket.template" />
-    <Content Include="App.config" />
-    <None Include="paket.references" />
-    <None Include="Lexer.fsl" />
   </ItemGroup>
-  <Target Name="BeforeBuild">
-    <MakeDir Directories="gen" />
-    <Exec Command="$(SolutionDir)lib\FsYARD\YC.FsLex.exe --unicode $(SolutionDir)src\DotParser\Lexer.fsl -o $(SolutionDir)src\DotParser\gen\Lexer.fs" Condition=" '$(OS)' != 'Unix' " />
-    <Exec Command="mono $(SolutionDir)lib/FsYARD/YC.FsLex.exe --unicode $(SolutionDir)src/DotParser/Lexer.fsl -o $(SolutionDir)src/DotParser/gen/Lexer.fs" Condition=" '$(OS)' == 'Unix' " />
-  </Target>
-  <Target Name="AfterBuild">
-    <MakeDir Directories="bin\ReleaseMerged" />
-    <Exec Command=
-    "$(SolutionDir)packages\build\ilmerge\tools\ILMerge.exe /out:bin\ReleaseMerged\DotParser.dll bin\Release\DotParser.dll bin\Release\AST.Common.dll bin\Release\FsLexYacc.Runtime.dll bin\Release\YC.RNGLRCommon.dll bin\Release\YC.RNGLRParser.dll" />
-    <Move SourceFiles="bin\Release\FSharpx.Collections.dll" DestinationFolder="bin\ReleaseMerged" />
-    <Move SourceFiles="bin\Release\FSharpx.Collections.Experimental.dll" DestinationFolder="bin\ReleaseMerged" />
-    <RemoveDir Directories="bin\Release" />
-    <MakeDir Directories="bin\Release" />
-    <Move SourceFiles="bin\ReleaseMerged\DotParser.dll" DestinationFolder="bin\Release"/>
-    <Move SourceFiles="bin\ReleaseMerged\FSharpx.Collections.dll" DestinationFolder="bin\Release" />
-    <Move SourceFiles="bin\ReleaseMerged\FSharpx.Collections.Experimental.dll" DestinationFolder="bin\Release" />
-  </Target>
-  <PropertyGroup>
-    <PreBuildEvent Condition=" '$(OS)' != 'Unix' ">$(SolutionDir)lib\FsYARD\YC.YaccConstructor.exe -i $(SolutionDir)src\DotParser\Grammar.yrd -g "RNGLRGenerator -pos int -token string -module Parser -translate true -o $(SolutionDir)src\DotParser\gen/Parser.fs"</PreBuildEvent>
-    <PreBuildEvent Condition=" '$(OS)' == 'Unix' ">mono $(SolutionDir)lib/FsYARD/YC.YaccConstructor.exe -i $(SolutionDir)src/DotParser/Grammar.yrd -g "RNGLRGenerator -pos int -token string -module Parser -translate true -o $(SolutionDir)src/DotParser/gen/Parser.fs"</PreBuildEvent>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="AST.Common">
-      <HintPath>..\..\lib\FsYARD\AST.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="FSharp.Core, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FsLexYacc.Runtime">
-      <HintPath>..\..\lib\FsYARD\FsLexYacc.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="YC.Conversions">
-      <HintPath>..\..\lib\FsYARD\YC.Conversions.dll</HintPath>
-    </Reference>
-    <Reference Include="YC.RNGLR">
-      <HintPath>..\..\lib\FsYARD\YC.RNGLR.dll</HintPath>
-    </Reference>
-    <Reference Include="YC.RNGLRCommon">
-      <HintPath>..\..\lib\FsYARD\YC.RNGLRCommon.dll</HintPath>
-    </Reference>
-    <Reference Include="YC.RNGLRParser">
-      <HintPath>..\..\lib\FsYARD\YC.RNGLRParser.dll</HintPath>
-    </Reference>
+    <PackageReference Include="FSharpx.Collections" Version="1.8.45">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="FSharpx.Collections.Experimental" Version="1.8.41">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="FsLexYacc.Runtime" Version="7.0.6">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="ILRepack" Version="$(ILRepackVersion)">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <PackageReference Include="YC.FsYARD" Version="$(FsYardVersion)">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
-      <ItemGroup>
-        <Reference Include="FSharpx.Collections">
-          <HintPath>..\..\packages\build\FSharpx.Collections\lib\net40\FSharpx.Collections.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
-      <ItemGroup>
-        <Reference Include="FSharpx.Collections.Experimental">
-          <HintPath>..\..\packages\build\FSharpx.Collections.Experimental\lib\net40\FSharpx.Collections.Experimental.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.5.0" />
+    <PackageReference Update="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
+  <Target Name="PrintReferences" DependsOnTargets="ResolveProjectReferences;ResolveAssemblyReferences">
+	  <Message Text="Assembly References:" Importance="high" />
+	  <Message Text="@(_ResolveAssemblyReferenceResolvedFiles)" />
+  </Target>
+
+  <Target Name="PostBuild" BeforeTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <InputAssemblies>$(OutputPath)\DotParser.dll $(OutputPath)\AST.Common.dll $(OutputPath)\FsLexYacc.Runtime.dll $(OutputPath)\YC.RNGLRCommon.dll $(OutputPath)\YC.RNGLRParser.dll</InputAssemblies>
+    </PropertyGroup>
+    <Copy SourceFiles="@(_ResolveAssemblyReferenceResolvedFiles)" DestinationFolder="$(OutputPath)" />
+
+    <Exec Command="$(ILRepack) -target:library -internalize -out:$(OutputPath)\DotParser.dll -lib:$(OutputPath) $(InputAssemblies)" />
+  </Target>
 </Project>
