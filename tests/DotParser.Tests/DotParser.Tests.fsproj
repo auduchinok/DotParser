@@ -8,7 +8,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <StartAction>Project</StartAction>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -18,7 +18,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <NoWarn>FS1182;FS3189</NoWarn>
   </PropertyGroup>
 

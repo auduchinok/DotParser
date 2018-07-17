@@ -9,7 +9,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <OtherFlags>--warnon:1182</OtherFlags>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -21,7 +21,7 @@
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>.\bin\Release\DotParser.xml</DocumentationFile>
     <OtherFlags>--warnon:1182</OtherFlags>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <NoWarn>FS1182;FS3189</NoWarn>
   </PropertyGroup>
 
@@ -40,7 +40,7 @@
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Condition="!Exists('Lexer.fs')" Command="$(YCFsLex) --unicode Lexer.fsl -o Lexer.fs" />
-    <Exec Condition="!Exists('Grammar.yrd.fs')" Command="$(YaccConstructor) -i Grammar.yrd -g &quot;RNGLRGenerator -pos int -token string -module Parser -translate true&quot;" />
+    <Exec ContinueOnError="true" Condition="!Exists('Grammar.yrd.fs')" Command="$(YaccConstructor) -i Grammar.yrd -g &quot;RNGLRGenerator -pos int -token string -module Parser -translate true&quot;" />
   </Target>
 
   <ItemGroup>
@@ -64,11 +64,17 @@
     <PackageReference Update="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
+  <Target Name="PrintReferences" DependsOnTargets="ResolveProjectReferences;ResolveAssemblyReferences">
+	  <Message Text="Assembly References:" Importance="high" />
+	  <Message Text="@(_ResolveAssemblyReferenceResolvedFiles)" />
+  </Target>
+
   <Target Name="PostBuild" BeforeTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
     <PropertyGroup>
       <InputAssemblies>$(OutputPath)\DotParser.dll $(OutputPath)\AST.Common.dll $(OutputPath)\FsLexYacc.Runtime.dll $(OutputPath)\YC.RNGLRCommon.dll $(OutputPath)\YC.RNGLRParser.dll</InputAssemblies>
     </PropertyGroup>
-    
+    <Copy SourceFiles="@(_ResolveAssemblyReferenceResolvedFiles)" DestinationFolder="$(OutputPath)" />
+
     <Exec Command="$(ILRepack) -target:library -internalize -out:bin\Release\DotParser.dll -lib:$(OutputPath) $(InputAssemblies)" />
   </Target>
 </Project>
