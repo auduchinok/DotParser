@@ -42,6 +42,7 @@ rule tokenize = parse
 | _ { failwithf "unexpected input: %s" <| lexeme lexbuf }
 
 and string pos s = parse
+| "\\\""  { string pos (s + "\"") lexbuf }
 | "\\"    { string pos s lexbuf }
 | "\r"    { string pos s lexbuf }
 | "\""    { s }
