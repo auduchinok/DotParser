@@ -213,6 +213,11 @@ let ``Edge statement attributes`` () =
 
     graph.Edges.["a", "b"] |> should equal [map ["color", "red"]]
 
+[<Test>]
+let ``Edge statement attributes with escape quotes`` () =
+    let graph = DotParser.parse """graph { a -- b [color="\"red\""] }"""
+
+    graph.Edges.["a", "b"] |> should equal [map ["color", "\"red\""]]
 
 [<Test>]
 let ``Node statement attributes`` () =
