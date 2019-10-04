@@ -271,3 +271,12 @@ let ``Parse and ignore assign statement`` () =
 [<Test>]
 let ``Parse and ignore port, compass pointers`` () =
     testNodesInGraph "graph { a : f : n b : g }" ["a", Map.empty; "b", Map.empty]
+
+[<Test>]
+let ``Node attributes are preserved after edge attributes`` () =
+    let graph =
+        "graph { a[color=red]; b[color=yellow]; a -- b[color=blue] }"
+        |> DotParser.parse
+
+    graph.Nodes.["a"] |> should equal (map ["color", "red"])
+    graph.Nodes.["b"] |> should equal (map ["color", "yellow"])
