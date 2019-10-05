@@ -44,6 +44,10 @@ let addAttributes (g : GraphData) (key : string) (a : Attributes) =
 
 
 let addNode (g : GraphData) (n : string) (a : Attributes) =
+    let a =
+        match g.Nodes.TryFind n with
+        | Some attributes -> merge attributes a
+        | None -> a
     { g with Nodes = Map.add n (merge g.NodeAttributes a) g.Nodes }, [n]
 
 
