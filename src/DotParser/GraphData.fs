@@ -1,33 +1,28 @@
 ﻿// Eugene Auduchinok, 2016
 
-module GraphData
-
-open Option
-open System.Collections.Generic
-
+[<AutoOpen>]
+module DotParser.GraphData
 
 type Attributes = Map<string, string>
+
 type GraphData =
-    {
-        IsDirected : bool
-        IsStrict   : bool
-        Nodes : Map<string, Attributes>
-        Edges : Map<string * string, Attributes list>
-        GraphAttributes : Attributes
-        NodeAttributes  : Attributes
-        EdgeAttributes  : Attributes
-    }
+    { IsDirected: bool
+      IsStrict: bool
+      Nodes: Map<string, Attributes>
+      Edges: Map<string * string, Attributes list>
+      GraphAttributes: Attributes
+      NodeAttributes: Attributes
+      EdgeAttributes: Attributes }
 
 let emptyGraph d s =
-    {
-        IsDirected = d
-        IsStrict   = s
-        Nodes = Map.empty
-        Edges = Map.empty
-        GraphAttributes = Map.empty
-        NodeAttributes  = Map.empty
-        EdgeAttributes  = Map.empty
-    }
+    { IsDirected = d
+      IsStrict   = s
+      Nodes = Map.empty
+      Edges = Map.empty
+      GraphAttributes = Map.empty
+      NodeAttributes  = Map.empty
+      EdgeAttributes  = Map.empty }
+
 
 let copyAttrs (g : GraphData) =
     { g with Nodes = Map.empty; Edges = Map.empty }
