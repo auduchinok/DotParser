@@ -1,17 +1,16 @@
-module DotParser.Tests
+module Tests
 
 open DotParser
-open GraphData
 open FsUnit
 open NUnit.Framework
 
-let isDirected (g : GraphData) = g.IsDirected
-let isStrict   (g : GraphData) = g.IsStrict
-let isEmpty    (g : GraphData) = g.Nodes.IsEmpty
-let nodesCount (g : GraphData) = g.Nodes.Count
-let edgesCount (g : GraphData) = Map.fold (fun acc _ x -> acc + List.length x) 0 g.Edges
+let isDirected (g: GraphData) = g.IsDirected
+let isStrict   (g: GraphData) = g.IsStrict
+let isEmpty    (g: GraphData) = g.Nodes.IsEmpty
+let nodesCount (g: GraphData) = g.Nodes.Count
+let edgesCount (g: GraphData) = Map.fold (fun acc _ x -> acc + List.length x) 0 g.Edges
 
-let shouldContainNodes names (g : GraphData) =
+let shouldContainNodes names (g: GraphData) =
     List.forall g.Nodes.ContainsKey names |> should be True
 
 let map = Map.ofList

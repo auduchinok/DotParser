@@ -1,9 +1,10 @@
 ﻿{
-module Lexer
 
-open Parser
+[<AutoOpen>]
+module internal DotParser.Lexer
+
+open DotParser.Parser
 open Microsoft.FSharp.Text.Lexing
-open System
 
 let lexeme = LexBuffer<_>.LexemeString
 
@@ -16,6 +17,7 @@ let keywords =
         "node", NODE;
         "edge", EDGE;
     ] |> Map.ofList
+
 }
 
 let digit = ['0'-'9']
