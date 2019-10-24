@@ -22,7 +22,7 @@
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Condition="!Exists('Lexer.fs')" Command="$(YCFsLex) --unicode Lexer.fsl -o Lexer.fs" />
-    <Exec ContinueOnError="true" Condition="!Exists('Grammar.yrd.fs')" Command="$(YaccConstructor) -i Grammar.yrd -g &quot;RNGLRGenerator -pos int -token string -module Parser -translate true&quot;" />
+    <Exec ContinueOnError="true" Condition="!Exists('Grammar.yrd.fs')" Command="$(YaccConstructor) -i Grammar.yrd -g &quot;RNGLRGenerator -pos int -token string -module DotParser.Parser -translate true&quot;" />
   </Target>
 
   <ItemGroup>
