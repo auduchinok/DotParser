@@ -7,6 +7,7 @@ type Attributes = Map<string, string>
 type GraphData =
     { IsDirected: bool
       IsStrict: bool
+      Subgraphs: GraphData list
       Nodes: Map<string, Attributes>
       Edges: Map<string * string, Attributes list>
       GraphAttributes: Attributes
@@ -20,6 +21,7 @@ module GraphData =
     let emptyGraph d s =
         { IsDirected = d
           IsStrict = s
+          Subgraphs = []
           Nodes = Map.empty
           Edges = Map.empty
           GraphAttributes = Map.empty
@@ -27,7 +29,7 @@ module GraphData =
           EdgeAttributes = Map.empty }
 
     let copyAttrs (g: GraphData) =
-        { g with Nodes = Map.empty; Edges = Map.empty }
+        { g with Nodes = Map.empty; Edges = Map.empty ; Subgraphs = []}
 
 
     let merge = Map.fold (fun acc key value -> Map.add key value acc)
@@ -66,8 +68,8 @@ module GraphData =
         List.fold (fun (g, n1) n2 -> addEdges g n1 n2 a) (g, ns.Head) ns.Tail |> fst
 
     let addSubgraph (g: GraphData) (s: GraphData) =
+        let addSubgraph g = {g with Subgraphs = s :: g.Subgraphs}
         let addNodes g = Map.fold (fun acc n attr -> fst <| addNode acc n attr) g s.Nodes
         let addParallelEdges n1 n2 = List.fold (fun acc x -> addEdge acc n1 n2 x)
         let addEdges g = Map.fold (fun acc (n1, n2) attr -> addParallelEdges n1 n2 acc attr) g s.Edges
-
-        g |> addNodes |> addEdges, s.Nodes |> Map.toList |> List.map fst
+        g |> addSubgraph |> addNodes |> addEdges, s.Nodes |> Map.toList |> List.map fst
