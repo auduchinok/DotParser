@@ -10,6 +10,7 @@ let isEmpty    (g: GraphData) = g.Nodes.IsEmpty
 let nodesCount (g: GraphData) = g.Nodes.Count
 let edgesCount (g: GraphData) = Map.fold (fun acc _ x -> acc + List.length x) 0 g.Edges
 let subgraphsCount (g: GraphData) = g.Subgraphs.Length
+
 let rec totalSubgraphsCount (g: GraphData) =
     g.Subgraphs.Length
     + (g.Subgraphs |> List.fold (fun cnt s -> totalSubgraphsCount s + cnt) 0) 
