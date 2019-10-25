@@ -9,6 +9,10 @@ let isStrict   (g: GraphData) = g.IsStrict
 let isEmpty    (g: GraphData) = g.Nodes.IsEmpty
 let nodesCount (g: GraphData) = g.Nodes.Count
 let edgesCount (g: GraphData) = Map.fold (fun acc _ x -> acc + List.length x) 0 g.Edges
+let subgraphsCount (g: GraphData) = g.Subgraphs.Length
+let rec totalSubgraphsCount (g: GraphData) =
+    g.Subgraphs.Length
+    + (g.Subgraphs |> List.fold (fun cnt s -> totalSubgraphsCount s + cnt) 0) 
 
 let shouldContainNodes names (g: GraphData) =
     List.forall g.Nodes.ContainsKey names |> should be True
@@ -127,7 +131,11 @@ let ``Subgraph statement`` () =
 
     graph |> nodesCount |> should equal 4
     graph |> edgesCount |> should equal 1
+    
+    graph |> subgraphsCount |> should equal 1
+    graph |> totalSubgraphsCount |> should equal 1
 
+    graph.Subgraphs.[0] |> shouldContainNodes ["b"; "c"; "d"]
 
 [<Test>]
 let ``Subgraph on left of edge`` () =
@@ -135,9 +143,12 @@ let ``Subgraph on left of edge`` () =
 
     nodesCount graph |> should equal 3
     edgesCount graph |> should equal 2
+    
+    graph |> subgraphsCount |> should equal 1
+    graph |> totalSubgraphsCount |> should equal 1
 
     graph |> shouldContainNodes ["a"; "b"; "c"]
-
+    graph.Subgraphs.[0] |> shouldContainNodes ["a"; "b"]
 
 [<Test>]
 let ``Subgraph on right of edge`` () =
@@ -145,8 +156,12 @@ let ``Subgraph on right of edge`` () =
 
     nodesCount graph |> should equal 3
     edgesCount graph |> should equal 2
+    
+    graph |> subgraphsCount |> should equal 1
+    graph |> totalSubgraphsCount |> should equal 1
 
     graph |> shouldContainNodes ["a"; "b"; "c"]
+    graph.Subgraphs.[0] |> shouldContainNodes ["b"; "c"]
 
 
 [<Test>]
@@ -156,7 +171,12 @@ let ``Subgraph on both sides of edge`` () =
     nodesCount graph |> should equal 4
     edgesCount graph |> should equal 4
 
+    graph |> subgraphsCount |> should equal 2
+    graph |> totalSubgraphsCount |> should equal 2
+    
     graph |> shouldContainNodes ["a"; "b"; "c"; "d"]
+    graph.Subgraphs.[1] |> shouldContainNodes ["a"; "b"]
+    graph.Subgraphs.[0] |> shouldContainNodes ["c"; "d"]
 
 
 [<Test>]
@@ -166,7 +186,12 @@ let ``Nested subgraphs`` () =
     nodesCount graph |> should equal 4
     edgesCount graph |> should equal 5
 
+    graph |> subgraphsCount |> should equal 1
+    graph |> totalSubgraphsCount |> should equal 2
+    
     graph |> shouldContainNodes ["a"; "b"; "c"; "d"]
+    graph.Subgraphs.[0] |> shouldContainNodes ["b"; "c"; "d"]
+    graph.Subgraphs.[0].Subgraphs.[0] |> shouldContainNodes ["c"; "d"]
 
 
 [<Test>]
