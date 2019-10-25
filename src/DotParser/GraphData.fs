@@ -72,5 +72,4 @@ module GraphData =
         let addNodes g = Map.fold (fun acc n attr -> fst <| addNode acc n attr) g s.Nodes
         let addParallelEdges n1 n2 = List.fold (fun acc x -> addEdge acc n1 n2 x)
         let addEdges g = Map.fold (fun acc (n1, n2) attr -> addParallelEdges n1 n2 acc attr) g s.Edges
-        
         g |> addSubgraph |> addNodes |> addEdges, s.Nodes |> Map.toList |> List.map fst
